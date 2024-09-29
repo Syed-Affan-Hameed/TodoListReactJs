@@ -16,6 +16,16 @@ function App() {
     setNewItem(""); // Clear the input after adding the item
   }
 
+  function toggleCheck(todoId,IsChecked){
+    setTodos(currentTodos=>{
+      let modifiedTodoList= currentTodos.map(todo=>{
+        if(todo.id===todoId){
+          return {...todo,IsChecked}
+        }
+      })
+    })
+  }
+
   return (
     <>
       <form onSubmit={handleClick} className="new-item-form">
@@ -28,13 +38,13 @@ function App() {
             id="item"
           />
         </div>
-        <button className="btn">Add To do item</button>
+        <button type="submit" className="btn">Add To do item</button>
       </form>
       <h1 className="header">To do List</h1>
       <ul className="list">
         {todos.map((todo) => (
           <li key={todo.id}>
-            <input type="checkbox" checked={todo.completed} readOnly />
+            <input type="checkbox" checked={todo.completed} onChange={(e)=>toggleCheck(todo.id,e.target.checked)} />
             <label>{todo.title}</label>
             <button className="btn btn-danger">Delete</button>
           </li>
