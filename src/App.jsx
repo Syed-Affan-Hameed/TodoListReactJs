@@ -1,19 +1,28 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./styles.css";
+import AddTodoForm from "./AddTodoForm";
 
 function App() {
-  const [newItem, setNewItem] = useState("");
-  const [todos, setTodos] = useState([]);
 
-  function handleClick(e) {
-    e.preventDefault();
+  const [todos, setTodos] = useState(()=>{
+    const localValue=localStorage.getItem("ITEMS");
+    if(localValue== null){
+      return [];
+    }
+    return JSON.parse(localValue);
+  });
+
+  useEffect(()=>{
+localStorage.setItem("ITEMS", JSON.stringify(todos))
+  },[todos]);
+
+  function addTodo(title){
     setTodos((currentTodos) => {
       return [
         ...currentTodos,
-        { id: crypto.randomUUID(), title: newItem, completed: false },
+        { id: crypto.randomUUID(), title: title, completed: false },
       ];
     });
-    setNewItem(""); // Clear the input after adding the item
   }
 
   function toggleCheck(todoId, completed) {
@@ -39,20 +48,7 @@ function App() {
 
   return (
     <>
-      <form onSubmit={handleClick} className="new-item-form">
-        <div className="form-row">
-          <label htmlFor="item">New Item</label>
-          <input
-            type="text"
-            value={newItem}
-            onChange={(e) => setNewItem(e.target.value)}
-            id="item"
-          />
-        </div>
-        <button type="submit" className="btn">
-          Add To do item
-        </button>
-      </form>
+    <AddTodoForm addTodo ={addTodo}/>
       <h1 className="header">To do List</h1>
       <ul className="list">
         {(todos.length===0)?"No todos":""}
