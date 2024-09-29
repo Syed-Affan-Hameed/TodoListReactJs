@@ -55,6 +55,7 @@ function App() {
       </form>
       <h1 className="header">To do List</h1>
       <ul className="list">
+        {(todos.length===0)?"No todos":""}
         {todos.map((todo) => (
           <li key={todo.id}>
             <label>
