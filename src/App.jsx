@@ -16,13 +16,24 @@ function App() {
     setNewItem(""); // Clear the input after adding the item
   }
 
-  function toggleCheck(todoId,IsChecked){
-    setTodos(currentTodos=>{
-      let modifiedTodoList= currentTodos.map(todo=>{
-        if(todo.id===todoId){
-          return {...todo,IsChecked}
+  function toggleCheck(todoId, completed) {
+    setTodos((currentTodos) => {
+      let modifiedTodoList = currentTodos.map((todo) => {
+        if (todo.id === todoId) {
+          return { ...todo, completed };
+        } else {
+          return todo;
         }
-      })
+      });
+      return modifiedTodoList;
+    });
+  }
+  function DeleteTodoItem(todoId){
+
+    setTodos((currentTodos)=>{
+
+      let modifiedTodoList= currentTodos.filter((todo)=>{todo.id!==todoId})
+      return modifiedTodoList;
     })
   }
 
@@ -38,15 +49,22 @@ function App() {
             id="item"
           />
         </div>
-        <button type="submit" className="btn">Add To do item</button>
+        <button type="submit" className="btn">
+          Add To do item
+        </button>
       </form>
       <h1 className="header">To do List</h1>
       <ul className="list">
         {todos.map((todo) => (
           <li key={todo.id}>
-            <input type="checkbox" checked={todo.completed} onChange={(e)=>toggleCheck(todo.id,e.target.checked)} />
-            <label>{todo.title}</label>
-            <button className="btn btn-danger">Delete</button>
+            <input
+              id="TodolistItem"
+              type="checkbox"
+              checked={todo.completed}
+              onChange={(e) => toggleCheck(todo.id, e.target.checked)}
+            />
+            <label htmlFor="TodolistItem">{todo.title}</label>
+            <button className="btn btn-danger" onClick={(e)=>DeleteTodoItem(todo.id) } >Delete</button>
           </li>
         ))}
       </ul>
